@@ -1,0 +1,60 @@
+@use "vars";
+
+window.MusicWidget > box {
+	padding: 2px;
+
+	box.player {
+		box.cover-art {
+			min-height: 128px;
+			min-width: 128px;
+
+			background-color: transparent;
+			background-size: cover;
+			background-origin: border-box;
+			background-blend-mode: multiply;
+			border: vars.$borderWidth solid vars.$border;
+			border-radius: vars.$borderRadius 0 0 vars.$borderRadius;
+
+			icon {
+				font-size: 32px;
+				opacity: 0;
+				transition: opacity 200ms ease-out;
+			}
+
+			transition: background-color 200ms ease-out;
+			&.dim {
+				background-color: rgba(black, 0.4);
+
+				icon {
+					opacity: 1;
+				}
+			}
+		}
+
+		box.metadata {
+			@include vars.box;
+
+			min-width: 200px;
+			padding: 8px 14px;
+
+			border-radius: 0 vars.$borderRadius vars.$borderRadius 0;
+			border-left: none;
+
+			button icon {
+				//font-size: 24px;
+			}
+
+			trough {
+				min-height: 4px;
+				margin-bottom: 6px;
+
+				background-color: vars.$fgDim;
+				border-radius: 2px;
+			}
+			highlight {
+				background-color: vars.$fg;
+				border-radius: 2px;
+			}
+		}
+	}
+}

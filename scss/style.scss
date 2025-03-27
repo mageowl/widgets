@@ -1,0 +1,27 @@
+@use "Bar";
+@use "MusicWidget";
+@use "Notifications";
+@use "Menu";
+@use "vars";
+
+* {
+	all: unset;
+	// prettier-ignore
+	-GtkWidget-cursor-aspect-ratio: 0.09;
+}
+
+window {
+	font: vars.$font;
+	font-feature-settings: vars.$fontFeatures;
+	letter-spacing: vars.$fontKerning;
+	color: vars.$fg;
+}
+
+icon {
+	font-size: vars.$iconSize;
+	transition: color 200ms ease-out;
+}
+
+.dim {
+	color: vars.$fgDim;
+}

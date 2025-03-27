@@ -1,0 +1,28 @@
+$cubicOut: cubic-bezier(0.215, 0.61, 0.355, 1);
+
+window.Bar box.component.Workspaces {
+	padding: 14px;
+	min-height: 8px;
+
+	button {
+		min-height: 8px;
+		min-width: 8px;
+
+		padding: 0;
+
+		background-color: white;
+		opacity: 0.2;
+		border-radius: 8px;
+
+		transition: min-width 200ms $cubicOut;
+
+		&.active {
+			opacity: 0.5;
+		}
+
+		&.focused {
+			opacity: 1;
+			min-width: 16px;
+		}
+	}
+}

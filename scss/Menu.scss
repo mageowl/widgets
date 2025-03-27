@@ -1,0 +1,59 @@
+@use "vars";
+
+window.Menu {
+	font-size: 18px;
+
+	> box > box {
+		@include vars.box;
+
+		//border-color: rgba(vars.$accent, 0.59);
+		background-clip: padding-box;
+
+		&.search {
+			padding: 24px 32px;
+
+			//border-bottom: none;
+			border-radius: vars.$borderRadius vars.$borderRadius 0 0;
+
+			icon {
+				margin-right: 24px;
+				font-size: 24px;
+			}
+
+			&.no-list {
+				border-radius: vars.$borderRadius;
+			}
+		}
+
+		&.list {
+			padding: 0;
+
+			border-top: none;
+			border-radius: 0 0 vars.$borderRadius vars.$borderRadius;
+
+			.inner {
+				padding: 24px;
+
+				button.list-entry {
+					margin-left: 40px;
+					padding: 4px 16px;
+					border-radius: 8px;
+
+					icon {
+						font-size: 24px;
+						margin-right: 16px;
+					}
+
+					label {
+						min-height: 36px;
+					}
+
+					&.selected {
+						font-weight: bold;
+						color: #000;
+					}
+				}
+			}
+		}
+	}
+}

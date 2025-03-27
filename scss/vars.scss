@@ -1,0 +1,27 @@
+$font: 14px "JetBrains Mono";
+$fontFeatures: "ss02, cv14, cv18, cv20";
+$fontKerning: 3px;
+
+$bg: rgba(#000, 0.6);
+$bgSecondary: rgba(#fff, 0.2);
+$fg: #fff;
+$fgDim: rgba(#fff, 0.4);
+$accent: #f9a9d9;
+
+$iconSize: 16px;
+
+$border: rgba(#fff, 0.2);
+$borderWidth: 2px;
+$borderRadius: 10px;
+$borderRadiusSmall: 6px;
+
+$componentMargin: 8px;
+
+@mixin box {
+	padding: 0 14px;
+
+	background-color: $bg;
+	background-clip: padding-box;
+	border: $borderWidth solid $border;
+	border-radius: $borderRadius;
+}
