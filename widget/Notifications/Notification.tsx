@@ -7,12 +7,15 @@ interface NotifProps {
 	closing: Variable<boolean>;
 }
 export default function Notification({ notif, closing }: NotifProps) {
+	let isPath = notif.image?.startsWith("/");
+	
 	return (
 		<eventbox onClick={() => notif.dismiss()}>
 			<revealer revealChild={bind(closing).as((x) => !x)}>
 				<box className="Notification">
 					{notif.appIcon && <icon icon={notif.appIcon} />}
-					{notif.image && (
+					{notif.image && !isPath && <icon icon={notif.image} />}
+					{notif.image && isPath &&(
 						<box
 							className="icon"
 							valign={Gtk.Align.CENTER}
