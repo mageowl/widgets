@@ -21,7 +21,7 @@ export default EventComponent(
 					/>
 					<label
 						label={bind(players[0], "title").as(
-							(title) => title.replace(/\s?\([^)]+\)/g, "") || "Unknown Track",
+							(title: string | null) => title?.replace(/\s?\([^)]+\)/g, "") || "Unknown Track",
 						)}
 					/>
 				</>

@@ -1,4 +1,4 @@
-import { Binding } from "../../../../../usr/share/astal/gjs";
+import { Binding } from "astal";
 
 export function assert<T>(
 	value: T | undefined | null,
