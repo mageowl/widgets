@@ -7,7 +7,7 @@ import Menu, { openMenu } from "./widget/Menu";
 
 App.start({
 	css: style,
-	icons: `${SRC}/assets/icons`,
+	icons: `${SRC}/icons`,
 
 	main() {
 		App.get_monitors().map((monitor, id) => {
