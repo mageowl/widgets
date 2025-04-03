@@ -4,6 +4,7 @@ import { MicGain, Volume } from "./Bar/Volume";
 import Battery from "./Bar/Battery";
 import Workspaces from "./Bar/Workspaces";
 import Music from "./Bar/Music";
+import config from "../config";
 
 export default function Bar(gdkmonitor: Gdk.Monitor, monitorId: number) {
 	return (
@@ -17,10 +18,10 @@ export default function Bar(gdkmonitor: Gdk.Monitor, monitorId: number) {
 				Astal.WindowAnchor.LEFT |
 				Astal.WindowAnchor.RIGHT
 			}
-			marginBottom={10}
-			marginTop={5}
-			marginLeft={16}
-			marginRight={16}
+			marginBottom={config.margin}
+			marginTop={0}
+			marginLeft={config.margin}
+			marginRight={config.margin}
 		>
 			<centerbox>
 				<box>
