@@ -4,7 +4,7 @@ import { MicGain, Volume } from "./Bar/Volume";
 import Battery from "./Bar/Battery";
 import Workspaces from "./Bar/Workspaces";
 import Music from "./Bar/Music";
-import config from "../config";
+import { config } from "../app";
 
 export default function Bar(gdkmonitor: Gdk.Monitor, monitorId: number) {
 	return (
