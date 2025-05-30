@@ -3,6 +3,7 @@
 /// <reference path="./glib-2.0.d.ts" />
 /// <reference path="./gdk-4.0.d.ts" />
 /// <reference path="./cairo-1.0.d.ts" />
+/// <reference path="./cairo.d.ts" />
 /// <reference path="./pangocairo-1.0.d.ts" />
 /// <reference path="./pango-1.0.d.ts" />
 /// <reference path="./harfbuzz-0.0.d.ts" />
@@ -26,7 +27,7 @@ declare module 'gi://Gsk?version=4.0' {
     import type GObject from 'gi://GObject?version=2.0';
     import type GLib from 'gi://GLib?version=2.0';
     import type Gdk from 'gi://Gdk?version=4.0';
-    import type cairo from 'gi://cairo?version=1.0';
+    import type cairo from 'cairo';
     import type PangoCairo from 'gi://PangoCairo?version=1.0';
     import type Pango from 'gi://Pango?version=1.0';
     import type HarfBuzz from 'gi://HarfBuzz?version=0.0';
@@ -993,7 +994,7 @@ declare module 'gi://Gsk?version=4.0' {
             get_widths(): number[];
         }
 
-        module BroadwayRenderer {
+        namespace BroadwayRenderer {
             // Constructor properties interface
 
             interface ConstructorProps extends Renderer.ConstructorProps {}
@@ -1046,7 +1047,7 @@ declare module 'gi://Gsk?version=4.0' {
             get_surface(): cairo.Surface;
         }
 
-        module CairoRenderer {
+        namespace CairoRenderer {
             // Constructor properties interface
 
             interface ConstructorProps extends Renderer.ConstructorProps {}
@@ -1324,7 +1325,7 @@ declare module 'gi://Gsk?version=4.0' {
             get_path(): Path;
         }
 
-        module GLRenderer {
+        namespace GLRenderer {
             // Constructor properties interface
 
             interface ConstructorProps extends Renderer.ConstructorProps {}
@@ -1347,7 +1348,7 @@ declare module 'gi://Gsk?version=4.0' {
             static ['new'](): GLRenderer;
         }
 
-        module GLShader {
+        namespace GLShader {
             // Constructor properties interface
 
             interface ConstructorProps extends GObject.Object.ConstructorProps {
@@ -1816,7 +1817,7 @@ declare module 'gi://Gsk?version=4.0' {
             get_source(): RenderNode;
         }
 
-        module NglRenderer {
+        namespace NglRenderer {
             // Constructor properties interface
 
             interface ConstructorProps extends Renderer.ConstructorProps {}
@@ -2089,7 +2090,7 @@ declare module 'gi://Gsk?version=4.0' {
             write_to_file(filename: string): boolean;
         }
 
-        module Renderer {
+        namespace Renderer {
             // Constructor properties interface
 
             interface ConstructorProps extends GObject.Object.ConstructorProps {
@@ -2511,7 +2512,7 @@ declare module 'gi://Gsk?version=4.0' {
             get_transform(): Transform;
         }
 
-        module VulkanRenderer {
+        namespace VulkanRenderer {
             // Constructor properties interface
 
             interface ConstructorProps extends Renderer.ConstructorProps {}

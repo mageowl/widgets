@@ -2879,7 +2879,7 @@ declare module 'gi://GObject?version=2.0' {
              */
             DEEP_DERIVABLE,
         }
-        module Binding {
+        namespace Binding {
             // Constructor properties interface
 
             interface ConstructorProps extends Object.ConstructorProps {
@@ -3105,7 +3105,7 @@ declare module 'gi://GObject?version=2.0' {
             unbind(): void;
         }
 
-        module BindingGroup {
+        namespace BindingGroup {
             // Constructor properties interface
 
             interface ConstructorProps extends Object.ConstructorProps {
@@ -3220,7 +3220,7 @@ declare module 'gi://GObject?version=2.0' {
             set_source(source?: Object | null): void;
         }
 
-        module InitiallyUnowned {
+        namespace InitiallyUnowned {
             // Constructor properties interface
 
             interface ConstructorProps extends Object.ConstructorProps {}
@@ -3242,7 +3242,7 @@ declare module 'gi://GObject?version=2.0' {
             _init(...args: any[]): void;
         }
 
-        module Object {
+        namespace Object {
             // Signal callback interfaces
 
             interface Notify {
@@ -3554,7 +3554,21 @@ declare module 'gi://GObject?version=2.0' {
              * @returns the data if found,          or %NULL if no such data exists.
              */
             get_data(key: string): any | null;
-            get_property(property_name: string): any;
+            /**
+             * Gets a property of an object.
+             *
+             * The value can be:
+             * - an empty GObject.Value initialized by G_VALUE_INIT, which will be automatically initialized with the expected type of the property (since GLib 2.60)
+             * - a GObject.Value initialized with the expected type of the property
+             * - a GObject.Value initialized with a type to which the expected type of the property can be transformed
+             *
+             * In general, a copy is made of the property contents and the caller is responsible for freeing the memory by calling GObject.Value.unset.
+             *
+             * Note that GObject.Object.get_property is really intended for language bindings, GObject.Object.get is much more convenient for C programming.
+             * @param property_name The name of the property to get
+             * @param value Return location for the property value. Can be an empty GObject.Value initialized by G_VALUE_INIT (auto-initialized with expected type since GLib 2.60), a GObject.Value initialized with the expected property type, or a GObject.Value initialized with a transformable type
+             */
+            get_property(property_name: string, value: Value | any): any;
             /**
              * This function gets back user data pointers stored via
              * g_object_set_qdata().
@@ -3682,7 +3696,12 @@ declare module 'gi://GObject?version=2.0' {
              * @param data data to associate with that key
              */
             set_data(key: string, data?: any | null): void;
-            set_property(property_name: string, value: any): void;
+            /**
+             * Sets a property on an object.
+             * @param property_name The name of the property to set
+             * @param value The value to set the property to
+             */
+            set_property(property_name: string, value: Value | any): void;
             /**
              * Remove a specified datum from the object's data associations,
              * without invoking the association's destroy handler.
@@ -3767,26 +3786,36 @@ declare module 'gi://GObject?version=2.0' {
              * @param closure #GClosure to watch
              */
             watch_closure(closure: Closure): void;
+            /**
+             * Disconnects a handler from an instance so it will not be called during any future or currently ongoing emissions of the signal it has been connected to.
+             * @param id Handler ID of the handler to be disconnected
+             */
             disconnect(id: number): void;
+            /**
+             * Sets multiple properties of an object at once. The properties argument should be a dictionary mapping property names to values.
+             * @param properties Object containing the properties to set
+             */
             set(properties: { [key: string]: any }): void;
-            block_signal_handler(id: number): any;
-            unblock_signal_handler(id: number): any;
-            stop_emission_by_name(detailedName: string): any;
+            /**
+             * Blocks a handler of an instance so it will not be called during any signal emissions
+             * @param id Handler ID of the handler to be blocked
+             */
+            block_signal_handler(id: number): void;
+            /**
+             * Unblocks a handler so it will be called again during any signal emissions
+             * @param id Handler ID of the handler to be unblocked
+             */
+            unblock_signal_handler(id: number): void;
+            /**
+             * Stops a signal's emission by the given signal name. This will prevent the default handler and any subsequent signal handlers from being invoked.
+             * @param detailedName Name of the signal to stop emission of
+             */
+            stop_emission_by_name(detailedName: string): void;
         }
 
         /**
-         * `GParamSpec` encapsulates the metadata required to specify parameters, such as `GObject` properties.
-         *
-         * ## Parameter names
-         *
-         * A property name consists of one or more segments consisting of ASCII letters
-         * and digits, separated by either the `-` or `_` character. The first
-         * character of a property name must be a letter. These are the same rules as
-         * for signal naming (see [func`GObject`.signal_new]).
-         *
-         * When creating and looking up a `GParamSpec`, either separator can be
-         * used, but they cannot be mixed. Using `-` is considerably more
-         * efficient, and is the ‘canonical form’. Using `_` is discouraged.
+         * A GObject parameter specification that defines property characteristics.
+         * See https://gjs.guide/guides/gobject/basics.html#properties for more details.
          */
         abstract class ParamSpec<A = unknown> {
             static $gtype: GType<ParamSpec>;
@@ -3814,140 +3843,301 @@ declare module 'gi://GObject?version=2.0' {
              * @param name the canonical name of the property
              */
             static is_valid_name(name: string): boolean;
+            /**
+             * Creates a new GParamSpecChar instance specifying a G_TYPE_CHAR property.
+             * @param name The name of the property
+             * @param nick A human readable name for the property
+             * @param blurb A longer description of the property
+             * @param flags The flags for this property (e.g. READABLE, WRITABLE)
+             * @param minimum The minimum value for this property
+             * @param maximum The maximum value for this property
+             * @param defaultValue The default value for this property
+             */
             static ['char'](
                 name: string,
-                nick: string,
-                blurb: string,
+                nick: string | null,
+                blurb: string | null,
                 flags: ParamFlags | number,
                 minimum: number,
                 maximum: number,
                 defaultValue: number,
             ): ParamSpec<number>;
+            /**
+             * Creates a new GParamSpecUChar instance specifying a G_TYPE_UCHAR property.
+             * @param name The name of the property
+             * @param nick A human readable name for the property
+             * @param blurb A longer description of the property
+             * @param flags The flags for this property (e.g. READABLE, WRITABLE)
+             * @param minimum The minimum value for this property
+             * @param maximum The maximum value for this property
+             * @param defaultValue The default value for this property
+             */
             static uchar(
                 name: string,
-                nick: string,
-                blurb: string,
+                nick: string | null,
+                blurb: string | null,
                 flags: ParamFlags | number,
                 minimum: number,
                 maximum: number,
                 defaultValue: number,
             ): ParamSpec<number>;
+            /**
+             * Creates a new GParamSpecInt instance specifying a G_TYPE_INT property.
+             * @param name The name of the property
+             * @param nick A human readable name for the property
+             * @param blurb A longer description of the property
+             * @param flags The flags for this property (e.g. READABLE, WRITABLE)
+             * @param minimum The minimum value for this property
+             * @param maximum The maximum value for this property
+             * @param defaultValue The default value for this property
+             */
             static int(
                 name: string,
-                nick: string,
-                blurb: string,
+                nick: string | null,
+                blurb: string | null,
                 flags: ParamFlags | number,
                 minimum: number,
                 maximum: number,
                 defaultValue: number,
             ): ParamSpec<number>;
+            /**
+             * Creates a new GParamSpecUInt instance specifying a G_TYPE_UINT property.
+             * @param name The name of the property
+             * @param nick A human readable name for the property
+             * @param blurb A longer description of the property
+             * @param flags The flags for this property (e.g. READABLE, WRITABLE)
+             * @param minimum The minimum value for this property
+             * @param maximum The maximum value for this property
+             * @param defaultValue The default value for this property
+             */
             static uint(
                 name: string,
-                nick: string,
-                blurb: string,
+                nick: string | null,
+                blurb: string | null,
                 flags: ParamFlags | number,
                 minimum: number,
                 maximum: number,
                 defaultValue: number,
             ): ParamSpec<number>;
+            /**
+             * Creates a new GParamSpecLong instance specifying a G_TYPE_LONG property.
+             * @param name The name of the property
+             * @param nick A human readable name for the property
+             * @param blurb A longer description of the property
+             * @param flags The flags for this property (e.g. READABLE, WRITABLE)
+             * @param minimum The minimum value for this property
+             * @param maximum The maximum value for this property
+             * @param defaultValue The default value for this property
+             */
             static long(
                 name: string,
-                nick: string,
-                blurb: string,
+                nick: string | null,
+                blurb: string | null,
                 flags: ParamFlags | number,
                 minimum: number,
                 maximum: number,
                 defaultValue: number,
             ): ParamSpec<number>;
+            /**
+             * Creates a new GParamSpecULong instance specifying a G_TYPE_ULONG property.
+             * @param name The name of the property
+             * @param nick A human readable name for the property
+             * @param blurb A longer description of the property
+             * @param flags The flags for this property (e.g. READABLE, WRITABLE)
+             * @param minimum The minimum value for this property
+             * @param maximum The maximum value for this property
+             * @param defaultValue The default value for this property
+             */
             static ulong(
                 name: string,
-                nick: string,
-                blurb: string,
+                nick: string | null,
+                blurb: string | null,
                 flags: ParamFlags | number,
                 minimum: number,
                 maximum: number,
                 defaultValue: number,
             ): ParamSpec<number>;
+            /**
+             * Creates a new GParamSpecInt64 instance specifying a G_TYPE_INT64 property.
+             * @param name The name of the property
+             * @param nick A human readable name for the property
+             * @param blurb A longer description of the property
+             * @param flags The flags for this property (e.g. READABLE, WRITABLE)
+             * @param minimum The minimum value for this property
+             * @param maximum The maximum value for this property
+             * @param defaultValue The default value for this property
+             */
             static int64(
                 name: string,
-                nick: string,
-                blurb: string,
+                nick: string | null,
+                blurb: string | null,
                 flags: ParamFlags | number,
                 minimum: number,
                 maximum: number,
                 defaultValue: number,
             ): ParamSpec<number>;
+            /**
+             * Creates a new GParamSpecUInt64 instance specifying a G_TYPE_UINT64 property.
+             * @param name The name of the property
+             * @param nick A human readable name for the property
+             * @param blurb A longer description of the property
+             * @param flags The flags for this property (e.g. READABLE, WRITABLE)
+             * @param minimum The minimum value for this property
+             * @param maximum The maximum value for this property
+             * @param defaultValue The default value for this property
+             */
             static uint64(
                 name: string,
-                nick: string,
-                blurb: string,
+                nick: string | null,
+                blurb: string | null,
                 flags: ParamFlags | number,
                 minimum: number,
                 maximum: number,
                 defaultValue: number,
             ): ParamSpec<number>;
+            /**
+             * Creates a new GParamSpecFloat instance specifying a G_TYPE_FLOAT property.
+             * @param name The name of the property
+             * @param nick A human readable name for the property
+             * @param blurb A longer description of the property
+             * @param flags The flags for this property (e.g. READABLE, WRITABLE)
+             * @param minimum The minimum value for this property
+             * @param maximum The maximum value for this property
+             * @param defaultValue The default value for this property
+             */
             static float(
                 name: string,
-                nick: string,
-                blurb: string,
+                nick: string | null,
+                blurb: string | null,
                 flags: ParamFlags | number,
                 minimum: number,
                 maximum: number,
                 defaultValue: number,
             ): ParamSpec<number>;
+            /**
+             * Creates a new GParamSpecBoolean instance specifying a G_TYPE_BOOLEAN property. In many cases, it may be more appropriate to use an enum with g_param_spec_enum(), both to improve code clarity by using explicitly named values, and to allow for more values to be added in future without breaking API.
+             * @param name The name of the property
+             * @param nick A human readable name for the property
+             * @param blurb A longer description of the property
+             * @param flags The flags for this property (e.g. READABLE, WRITABLE)
+             * @param defaultValue The default value for this property
+             */
             static ['boolean'](
                 name: string,
-                nick: string,
-                blurb: string,
+                nick: string | null,
+                blurb: string | null,
                 flags: ParamFlags | number,
                 defaultValue: boolean,
             ): ParamSpec<boolean>;
+            /**
+             * Creates a new GParamSpecEnum instance specifying a G_TYPE_ENUM property.
+             * @param name The name of the property
+             * @param nick A human readable name for the property
+             * @param blurb A longer description of the property
+             * @param flags The flags for this property (e.g. READABLE, WRITABLE)
+             * @param enumType
+             * @param defaultValue The default value for this property
+             */
             static ['enum']<T>(
                 name: string,
-                nick: string,
-                blurb: string,
+                nick: string | null,
+                blurb: string | null,
                 flags: ParamFlags | number,
                 enumType: GType<T> | { $gtype: GType<T> },
                 defaultValue: any,
             ): ParamSpec<T>;
+            /**
+             * Creates a new GParamSpecDouble instance specifying a G_TYPE_DOUBLE property.
+             * @param name The name of the property
+             * @param nick A human readable name for the property
+             * @param blurb A longer description of the property
+             * @param flags The flags for this property (e.g. READABLE, WRITABLE)
+             * @param minimum The minimum value for this property
+             * @param maximum The maximum value for this property
+             * @param defaultValue The default value for this property
+             */
             static double(
                 name: string,
-                nick: string,
-                blurb: string,
+                nick: string | null,
+                blurb: string | null,
                 flags: ParamFlags | number,
                 minimum: number,
                 maximum: number,
                 defaultValue: number,
             ): ParamSpec<number>;
+            /**
+             * Creates a new GParamSpecString instance specifying a G_TYPE_STRING property.
+             * @param name The name of the property
+             * @param nick A human readable name for the property
+             * @param blurb A longer description of the property
+             * @param flags The flags for this property (e.g. READABLE, WRITABLE)
+             * @param defaultValue The default value for this property
+             */
             static string(
                 name: string,
-                nick: string,
-                blurb: string,
+                nick: string | null,
+                blurb: string | null,
                 flags: ParamFlags | number,
                 defaultValue: string,
             ): ParamSpec<string>;
+            /**
+             * Creates a new GParamSpecBoxed instance specifying a G_TYPE_BOXED derived property.
+             * @param name The name of the property
+             * @param nick A human readable name for the property
+             * @param blurb A longer description of the property
+             * @param flags The flags for this property (e.g. READABLE, WRITABLE)
+             * @param boxedType
+             */
             static boxed<T>(
                 name: string,
-                nick: string,
-                blurb: string,
+                nick: string | null,
+                blurb: string | null,
                 flags: ParamFlags | number,
                 boxedType: GType<T> | { $gtype: GType<T> },
             ): ParamSpec<T>;
+            /**
+             * Creates a new GParamSpecObject instance specifying a property holding object references.
+             * @param name The name of the property
+             * @param nick A human readable name for the property (can be null)
+             * @param blurb A longer description of the property (can be null)
+             * @param flags The flags for this property (e.g. READABLE, WRITABLE)
+             * @param objectType The GType of the object
+             */
             static object<T>(
                 name: string,
-                nick: string,
-                blurb: string,
-                flags: string,
+                nick: string | null,
+                blurb: string | null,
+                flags: ParamFlags | number,
                 objectType: GType<T> | { $gtype: GType<T> },
             ): ParamSpec<T>;
+            /**
+             * Creates a new GParamSpecParam instance specifying a G_TYPE_PARAM property.
+             * @param name The name of the property
+             * @param nick A human readable name for the property
+             * @param blurb A longer description of the property
+             * @param flags The flags for this property (e.g. READABLE, WRITABLE)
+             * @param paramType
+             */
             static param(
                 name: string,
-                nick: string,
-                blurb: string,
+                nick: string | null,
+                blurb: string | null,
                 flags: ParamFlags | number,
                 paramType: any,
             ): ParamSpec;
-            static jsobject<T>(name: string, nick: string, blurb: string, flags: any): ParamSpec<T>;
+            /**
+             * Creates a new ParamSpec instance for JavaScript object properties.
+             * @param name The name of the property
+             * @param nick A human readable name for the property (can be null)
+             * @param blurb A longer description of the property (can be null)
+             * @param flags The flags for this property (e.g. READABLE, WRITABLE)
+             */
+            static jsobject<T>(
+                name: string,
+                nick: string | null,
+                blurb: string | null,
+                flags: ParamFlags | number,
+            ): ParamSpec<T>;
 
             // Virtual methods
 
@@ -4064,10 +4254,15 @@ declare module 'gi://GObject?version=2.0' {
              * @returns the user data pointer set, or %NULL
              */
             steal_qdata(quark: GLib.Quark): any | null;
+            /**
+             * Registers a property override for a property introduced in a parent class or inherited interface.
+             * @param name The name of the property to override
+             * @param oclass The object class or type that contains the property to override
+             */
             override(name: string, oclass: Object | Function | GType): void;
         }
 
-        module SignalGroup {
+        namespace SignalGroup {
             // Signal callback interfaces
 
             interface Bind {
@@ -4218,7 +4413,7 @@ declare module 'gi://GObject?version=2.0' {
             unblock(): void;
         }
 
-        module TypeModule {
+        namespace TypeModule {
             // Constructor properties interface
 
             interface ConstructorProps extends Object.ConstructorProps, TypePlugin.ConstructorProps {}
@@ -4516,7 +4711,21 @@ declare module 'gi://GObject?version=2.0' {
              * @returns the data if found,          or %NULL if no such data exists.
              */
             get_data(key: string): any | null;
-            get_property(property_name: string): any;
+            /**
+             * Gets a property of an object.
+             *
+             * The value can be:
+             * - an empty GObject.Value initialized by G_VALUE_INIT, which will be automatically initialized with the expected type of the property (since GLib 2.60)
+             * - a GObject.Value initialized with the expected type of the property
+             * - a GObject.Value initialized with a type to which the expected type of the property can be transformed
+             *
+             * In general, a copy is made of the property contents and the caller is responsible for freeing the memory by calling GObject.Value.unset.
+             *
+             * Note that GObject.Object.get_property is really intended for language bindings, GObject.Object.get is much more convenient for C programming.
+             * @param property_name The name of the property to get
+             * @param value Return location for the property value. Can be an empty GObject.Value initialized by G_VALUE_INIT (auto-initialized with expected type since GLib 2.60), a GObject.Value initialized with the expected property type, or a GObject.Value initialized with a transformable type
+             */
+            get_property(property_name: string, value: Value | any): any;
             /**
              * This function gets back user data pointers stored via
              * g_object_set_qdata().
@@ -4644,7 +4853,12 @@ declare module 'gi://GObject?version=2.0' {
              * @param data data to associate with that key
              */
             set_data(key: string, data?: any | null): void;
-            set_property(property_name: string, value: any): void;
+            /**
+             * Sets a property on an object.
+             * @param property_name The name of the property to set
+             * @param value The value to set the property to
+             */
+            set_property(property_name: string, value: Value | any): void;
             /**
              * Remove a specified datum from the object's data associations,
              * without invoking the association's destroy handler.
@@ -4794,11 +5008,31 @@ declare module 'gi://GObject?version=2.0' {
              * @param pspec
              */
             vfunc_set_property(property_id: number, value: Value | any, pspec: ParamSpec): void;
+            /**
+             * Disconnects a handler from an instance so it will not be called during any future or currently ongoing emissions of the signal it has been connected to.
+             * @param id Handler ID of the handler to be disconnected
+             */
             disconnect(id: number): void;
+            /**
+             * Sets multiple properties of an object at once. The properties argument should be a dictionary mapping property names to values.
+             * @param properties Object containing the properties to set
+             */
             set(properties: { [key: string]: any }): void;
-            block_signal_handler(id: number): any;
-            unblock_signal_handler(id: number): any;
-            stop_emission_by_name(detailedName: string): any;
+            /**
+             * Blocks a handler of an instance so it will not be called during any signal emissions
+             * @param id Handler ID of the handler to be blocked
+             */
+            block_signal_handler(id: number): void;
+            /**
+             * Unblocks a handler so it will be called again during any signal emissions
+             * @param id Handler ID of the handler to be unblocked
+             */
+            unblock_signal_handler(id: number): void;
+            /**
+             * Stops a signal's emission by the given signal name. This will prevent the default handler and any subsequent signal handlers from being invoked.
+             * @param detailedName Name of the signal to stop emission of
+             */
+            stop_emission_by_name(detailedName: string): void;
         }
 
         /**
@@ -6460,7 +6694,7 @@ declare module 'gi://GObject?version=2.0' {
             _init(...args: any[]): void;
         }
 
-        module TypePlugin {
+        namespace TypePlugin {
             // Constructor properties interface
 
             interface ConstructorProps extends Object.ConstructorProps {}

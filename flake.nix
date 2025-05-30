@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "AGS widgets.";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -21,7 +21,7 @@
       noConfig = default.overrideAttrs (old: {
         src = builtins.path {
           path = ./.;
-          filter = path: type: !builtins.elem (builtins.baseNameOf path) ["config.ts" "vars.scss"];
+          filter = path: type: !builtins.elem (builtins.baseNameOf path) ["config.json" "vars.scss"];
         };
       });
     };

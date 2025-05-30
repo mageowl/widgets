@@ -1,9 +1,9 @@
-@use "vars";
+@use "/home/owl/.config/ags/scss/vars.scss";
 
 window.Menu {
 	font-size: 18px;
 
-	> box > box {
+	>box>box {
 		@include vars.box;
 
 		//border-color: rgba(vars.$accent, 0.59);

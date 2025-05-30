@@ -1,6 +1,7 @@
-@use "vars";
+@use "/home/owl/.config/ags/scss/vars.scss";
 
-window.Notifications > box {
+
+window.Notifications>box {
 	padding: 8px;
 
 	box.Notification {
@@ -11,6 +12,7 @@ window.Notifications > box {
 		margin-bottom: 12px;
 
 		transition: 200ms opacity ease-out;
+
 		&.closing {
 			opacity: 0;
 		}
@@ -26,6 +28,7 @@ window.Notifications > box {
 			background-origin: content-box;
 			border-radius: calc(vars.$borderRadius / 2);
 		}
+
 		icon {
 			min-width: 72px;
 			margin-left: -12px;
@@ -38,6 +41,7 @@ window.Notifications > box {
 				font-weight: bold;
 				margin: 8px 0 2px;
 			}
+
 			label.body {
 				margin-bottom: 8px;
 			}

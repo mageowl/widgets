@@ -1,6 +1,6 @@
 import { App } from "astal/gtk3";
 import { readFile } from "astal/file";
-import GLib from "gi://GLib?version=2.0"; 
+import GLib from "gi://GLib?version=2.0";
 import style from "./scss/style.scss";
 import Bar from "./widget/Bar";
 import MusicWidget from "./widget/MusicWidget";
